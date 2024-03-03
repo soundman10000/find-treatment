@@ -23,6 +23,12 @@ public readonly partial record struct TelephoneNumber : IContact
 
     public TelephoneNumber(string number, ContactTypes type)
     {
+        // For people who put a 1 in their number
+        if (number.Length == 11 && number[0] == '1')
+        {
+            number = number[1..];
+        }
+
         var split = number.Split(ExtensionDelimiter, StringSplitOptions.TrimEntries);
 
         if (!IsValid(split[0]))

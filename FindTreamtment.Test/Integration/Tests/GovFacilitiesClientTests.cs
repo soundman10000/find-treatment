@@ -61,9 +61,20 @@ public class GovFacilitiesClientTests
     }
 
     [Fact]
+    public async Task TotalStateRecords()
+    {
+        const string state = "Tx";
+        var limit = new Limit(state);
+
+        var basicResults = await this._client.FacilityCount(limit);
+
+        basicResults.Should().BeGreaterThan(3000);
+    }
+
+    [Fact]
     public async Task ToManyRecordsThrows()
     {
-        var test = () => this._client.FindFacilities(2001);
+        var test = () => this._client.FindFacilities(pageSize: 2001);
         await test.Should().ThrowAsync<ArgumentException>();
     }
 }

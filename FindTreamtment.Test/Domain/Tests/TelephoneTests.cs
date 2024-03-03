@@ -56,4 +56,12 @@ public class TelephoneTests
         const string number = "(713) 555-5555";
         new TelephoneNumber(number, ContactTypes.Main).ToString().Should().Be(number);
     }
+
+    [Fact]
+    public void NumberWith1BeforeAreaCode()
+    {
+        const string number = "12404612481";
+        var test = () => new TelephoneNumber(number, ContactTypes.Main);
+        test.Should().NotThrow();
+    }
 }

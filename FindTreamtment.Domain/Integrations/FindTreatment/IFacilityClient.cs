@@ -8,7 +8,7 @@ public interface IFacilityClient
 {
     const int DefaultPageSize = 30;
 
-    Task<int> FacilityCount();
+    Task<int> FacilityCount(Limit? limit = null);
 
     Task<IEnumerable<Facility>> FindFacilities(
         int page = 1,

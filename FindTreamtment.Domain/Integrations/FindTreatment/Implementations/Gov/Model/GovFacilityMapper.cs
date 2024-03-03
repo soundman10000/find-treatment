@@ -2,6 +2,8 @@
 * Find Treatment
 */
 
+using FindTreatment.Domain.Model;
+
 namespace FindTreatment.Domain;
 
 public static class GovFacilityMapper
@@ -35,13 +37,32 @@ public static class GovFacilityMapper
             .Where(z => z != null)
             .Cast<IContact>();
 
-        var webSite = facility.Website?.Apply(z => new Website(z));
+        Website? webSite = null;
+        try
+        {
+            webSite = facility.Website?.Apply(z => new Website(z));
+        }
+        catch
+        {
+            // Ignored
+        }
 
         var location = facility.Apply(z => new Coordinate(z.Latitude, z.Longitude));
+        var services = facility.Services.Coalesce().Select(ToService);
 
-        return new Facility(facility.Name1, facility.Name2, addresses, contacts, webSite, location);
+        return new Facility(
+            facility.Name1,
+            facility.Name2,
+            addresses,
+            contacts,
+            webSite,
+            location,
+            services);
     }
-        
+
     private static IContact? ToContact(string phone, ContactTypes type) =>
-        phone?.Apply(z => new TelephoneNumber(z, type));
+        phone?.Apply(z => string.IsNullOrEmpty(z) ? (IContact?)null : new TelephoneNumber(z, type));
+
+    private static FacilityService ToService(GovFacilityService govService) =>
+        new(govService.F2, govService.F1, govService.F3);
 }

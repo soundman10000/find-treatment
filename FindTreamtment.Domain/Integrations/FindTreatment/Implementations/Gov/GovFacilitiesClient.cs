@@ -9,7 +9,10 @@ namespace FindTreatment.Domain;
 public class GovFacilitiesClient : IFacilityClient
 {
     // Dictated by the government
-    private const int MaxResults = 2000;
+    public const int MaxResults = 2000;
+
+    // The search requires some geo-position in order to start, we will use their default.
+    private const string StartingPoint = @"""39.141375,-77.203552""";
 
     private readonly HttpClient _client;
     private readonly JsonSerializerSettings _settings;
@@ -20,11 +23,21 @@ public class GovFacilitiesClient : IFacilityClient
         this._settings = settings;
     }
 
-    public async Task<int> FacilityCount()
+    public async Task<int> FacilityCount(Limit? limit = null)
     {
+        var queryString = new
+            {
+                sAddr = StartingPoint,
+                page = 1,
+                pageSize = 1,
+                limitType = (int?)limit?.Type,
+                limitValue = limit?.Value,
+            }
+            .ToQueryString();
+
         try
         {
-            var response = await this._client.GetAsync(string.Empty);
+            var response = await this._client.GetAsync(queryString);
 
             return response.IsSuccessStatusCode
                 ? await response.ReadAndDeserializeResponse<GovPaginatedResponse<GovFacility>>(this._settings)
@@ -42,17 +55,18 @@ public class GovFacilitiesClient : IFacilityClient
         int pageSize = IFacilityClient.DefaultPageSize,
         Limit? limit = null)
     {
-        if (page > MaxResults)
+        if (pageSize > MaxResults)
         {
             throw new ArgumentException($"Cannot exceed {MaxResults} records");
-        } 
+        }
 
         var queryString = new
             {
+                sAddr = StartingPoint,
                 page,
                 pageSize,
                 limitType = (int?)limit?.Type,
-                limitValue = limit?.Value
+                limitValue = limit?.Value,
             }
             .ToQueryString();
 

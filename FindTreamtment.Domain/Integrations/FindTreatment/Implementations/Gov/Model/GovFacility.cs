@@ -18,4 +18,5 @@ public record GovFacility(
     string Website,
     float Latitude,
     float Longitude,
-    string TypeFacility);
+    string TypeFacility,
+    List<GovFacilityService> Services);
