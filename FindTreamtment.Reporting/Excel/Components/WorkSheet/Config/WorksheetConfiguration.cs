@@ -21,7 +21,7 @@ public class WorksheetConfiguration
     /// <summary>
     /// Default value to freeze rows in sheet
     /// </summary>
-    private const int DefaultFreezeRowCount = 2;
+    private const int DefaultFreezeRowCount = 1;
 
     /// <summary>
     /// Default logo right border offset from logo end column
@@ -58,8 +58,8 @@ public class WorksheetConfiguration
         this.DisplayLogo = displayLogo;
         this.LogoEndColumnIndex = logoEndColumnIndex ?? DefaultLogoEndColumnIndex;
         this.FreezeRowCount = freezeRowCount ?? DefaultFreezeRowCount;
-        this.MergeCellsRangeList = mergeCellsRangeList ?? new List<string>();
-        this.CustomizedCellStyleList = customizedCellStyleList ?? new List<SingleCellStyle>();
+        this.MergeCellsRangeList = mergeCellsRangeList.Coalesce();
+        this.CustomizedCellStyleList = customizedCellStyleList.Coalesce();
         this.LogoRightBorderOffset = logoRightBorderOffset ?? DefaultLogoRightBorderOffset;
     }
 

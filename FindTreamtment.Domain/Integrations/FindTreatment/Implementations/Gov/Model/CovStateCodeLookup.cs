@@ -6,7 +6,7 @@ namespace FindTreatment.Domain;
 
 public static class CovStateCodeLookup
 {
-    private static readonly IReadOnlyDictionary<string, int> StateCodeLookup =
+    public static readonly IReadOnlyDictionary<string, int> UriStateCodeLookup =
         new Dictionary<string, int>(StringComparer.CurrentCultureIgnoreCase)
         {
             { "AL", 19 },
@@ -64,7 +64,7 @@ public static class CovStateCodeLookup
 
     public static int GetGovFacilityStateCode(string stateCode)
     {
-        if (!StateCodeLookup.TryGetValue(stateCode, out var code))
+        if (!UriStateCodeLookup.TryGetValue(stateCode, out var code))
         {
             throw new Exception($"Invalid State Code : {stateCode}");
         }

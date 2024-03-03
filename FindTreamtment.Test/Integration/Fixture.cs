@@ -3,7 +3,6 @@
 */
 
 using FindTreatment.Domain;
-using FindTreatment.Reporting;
 using Microsoft.Extensions.Hosting;
 using Xunit;
 
@@ -20,7 +19,10 @@ public class IntegrationFixture
     public IntegrationFixture()
     {
         var host = new HostBuilder()
-            .ConfigureServices(s => s.UseFacilityClients().UseScrubbers().UseReporting())
+            .ConfigureServices(s => s
+                .UseFacilityClients()
+                .UseScrubbers()
+                .UseReports())
             .Build();
 
         this.Services = host.Services;

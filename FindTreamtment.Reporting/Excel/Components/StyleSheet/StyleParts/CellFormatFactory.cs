@@ -23,7 +23,7 @@ public static class CellFormatFactory
             ApplyAlignment = true,
             Alignment = new Alignment
             {
-                Horizontal = HorizontalAlignmentValues.Center,
+                Horizontal = HorizontalAlignmentValues.Left,
                 Vertical = VerticalAlignmentValues.Center,
                 WrapText = true
             }

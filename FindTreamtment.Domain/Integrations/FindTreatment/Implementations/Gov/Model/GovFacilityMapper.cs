@@ -61,7 +61,26 @@ public static class GovFacilityMapper
     }
 
     private static IContact? ToContact(string phone, ContactTypes type) =>
-        phone?.Apply(z => string.IsNullOrEmpty(z) ? (IContact?)null : new TelephoneNumber(z, type));
+        phone?.Apply(z => HandlePhone(type, z));
+
+    private static IContact? HandlePhone(ContactTypes type, string z)
+    {
+        if (string.IsNullOrEmpty(z))
+        {
+            return null;
+        }
+
+        try
+        {
+            return new TelephoneNumber(z, type);
+        }
+        catch
+        {
+            // Suppressed.
+        }
+        
+        return null;
+    }
 
     private static FacilityService ToService(GovFacilityService govService) =>
         new(govService.F2, govService.F1, govService.F3);
